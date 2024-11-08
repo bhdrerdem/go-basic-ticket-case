@@ -1,0 +1,9 @@
+CREATE TABLE ticket (
+    id SERIAL,
+    name VARCHAR(255) NOT NULL,
+    description TEXT NOT NULL,
+    allocation INT NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (id)
+);

@@ -1,0 +1,48 @@
+# Binaries for programs and plugins
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Executable files
+main
+*.out
+
+# Build directories
+/bin/
+
+# Dependency directories (for vendoring)
+vendor/
+
+# Go workspace file
+go.work
+go.work.sum
+
+# Generated files
+*.gen.go
+
+# Log files
+*.log
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# IDE-specific files
+.vscode/
+.idea/
+*.swp
+
+# Go test cache
+*.test
+
+# Go coverage files
+*.cover
+coverage.out
+
+# User-specific configuration
+*.env
+
+# Ignore compiled files and build artifacts
+/go-build/
+testdata/ # Optional: if you have test data that you don't want to version
