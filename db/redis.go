@@ -49,12 +49,12 @@ func connectRedis() error {
 	}
 
 	log.Println("Connected to Redis!!")
-	Redis.isHealthy = true
 	return nil
 }
 
 func startRedisHealthCheck() {
-	ticker := time.NewTicker(1000 * time.Millisecond)
+	Redis.isHealthy = true
+	ticker := time.NewTicker(10000 * time.Millisecond)
 	defer ticker.Stop()
 
 	for range ticker.C {

@@ -53,7 +53,8 @@ func connectDB() error {
 }
 
 func startDBHealthCheck() {
-	ticker := time.NewTicker(1000 * time.Millisecond)
+	DB.isHealthy = true
+	ticker := time.NewTicker(10000 * time.Millisecond)
 	defer ticker.Stop()
 
 	for range ticker.C {
