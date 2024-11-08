@@ -1,0 +1,37 @@
+# Vendoring
+/vendor/
+
+# Binaries and executables
+*.exe
+*.dll
+*.so
+*.dylib
+*.out
+main
+
+# Test results and build artifacts
+*.test
+*.out
+
+# Logs and temporary files
+*.log
+*.tmp
+
+# Git repository files
+.git/
+.gitignore
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# IDE-specific files
+.vscode/
+.idea/
+*.swp
+
+# Coverage files
+*.cover
+coverage.out
+æ
+/build/
