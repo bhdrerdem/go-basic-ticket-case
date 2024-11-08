@@ -96,7 +96,7 @@ func (s *TicketService) PurchaseTicket(ticketID int, quantity int) error {
 
 	ticket := &models.Ticket{}
 	err = tx.QueryRow(
-		"SELECT id, name, description, allocation FROM ticket WHERE id = $1 FOR NO KEY UPDATE",
+		"SELECT id, name, description, allocation FROM ticket WHERE id = $1 FOR UPDATE",
 		ticketID,
 	).Scan(&ticket.ID, &ticket.Name, &ticket.Description, &ticket.Allocation)
 
