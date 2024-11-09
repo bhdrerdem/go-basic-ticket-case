@@ -109,6 +109,11 @@ func (s *TicketService) PurchaseTicket(ticketID int, quantity int) error {
 		return fmt.Errorf("failed to get ticket: %v", err)
 	}
 
+	if ticket.Allocation == 0 {
+		err = errors.NewRestError("Ticket is sold out", 400)
+		return err
+	}
+
 	if ticket.Allocation < quantity {
 		err = errors.NewRestError("Not enough tickets available", 400)
 		return err
