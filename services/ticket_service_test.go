@@ -5,7 +5,6 @@ import (
 	"gowitcase/mocks"
 	"gowitcase/models"
 	"gowitcase/services"
-	"log"
 	"math"
 	"testing"
 
@@ -111,9 +110,6 @@ func TestCreateTicket_NameTooLong(t *testing.T) {
 	}
 
 	err := ticketService.CreateTicket(ticket)
-	if err != nil {
-		log.Printf("Error: %v", err)
-	}
 	assert.Error(t, err, "expected error when name exceeds maximum length")
 }
 

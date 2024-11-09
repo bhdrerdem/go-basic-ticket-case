@@ -34,7 +34,7 @@ func (h *TicketHandler) CreateTicket(ctx *gin.Context) {
 			return
 		}
 
-		log.Printf("Failed to create ticket: %v", err)
+		log.Printf("Failed to create ticket with err: %v, Ticket: %+v", err, ticket)
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create ticket"})
 		return
 	}
@@ -57,7 +57,7 @@ func (h *TicketHandler) GetTicket(ctx *gin.Context) {
 			return
 		}
 
-		log.Printf("Failed to get ticket: %v", err)
+		log.Printf("Failed to get ticket with err: %v, ticketID: %d", err, ticketID)
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Something went wrong, please try again."})
 		return
 	}
@@ -85,7 +85,7 @@ func (h *TicketHandler) PurchaseTicket(ctx *gin.Context) {
 			return
 		}
 
-		log.Printf("Failed to purchase ticket: %v", err)
+		log.Printf("Failed to purchase ticket with err: %v, purchase: %+v", err, purchaseRequest)
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to purchase ticket"})
 		return
 	}
