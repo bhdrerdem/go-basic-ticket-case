@@ -35,3 +35,5 @@ Thumbs.db
 coverage.out
 æ
 /build/
+
+.env

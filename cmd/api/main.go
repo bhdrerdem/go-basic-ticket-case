@@ -14,9 +14,16 @@ import (
 )
 
 func main() {
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatal("Failed to load env vars")
+
+	env := os.Getenv("ENV")
+	if env == "dev" {
+		err := godotenv.Load()
+		if err != nil {
+			log.Fatal("Failed to load env vars")
+		}
+		gin.SetMode(gin.DebugMode)
+	} else {
+		gin.SetMode(gin.ReleaseMode)
 	}
 
 	db.InitDB()
@@ -24,13 +31,6 @@ func main() {
 
 	ticketService := services.NewTicketService(&db.DB, &db.Redis)
 	ticketHandler := handlers.NewTicketHandler(ticketService)
-
-	env := os.Getenv("ENV")
-	if env == "dev" {
-		gin.SetMode(gin.DebugMode)
-	} else {
-		gin.SetMode(gin.ReleaseMode)
-	}
 
 	router := gin.Default()
 

@@ -13,9 +13,12 @@ import (
 )
 
 func main() {
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatal("Failed to load env vars")
+	env := os.Getenv("ENV")
+	if env == "dev" {
+		err := godotenv.Load()
+		if err != nil {
+			log.Fatal("Failed to load env vars")
+		}
 	}
 
 	connStr := buildConnString()
