@@ -5,6 +5,7 @@ import (
 	"gowitcase/handlers"
 	"gowitcase/services"
 	"log"
+	"os"
 
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
@@ -24,9 +25,14 @@ func main() {
 	ticketService := services.NewTicketService(&db.DB, &db.Redis)
 	ticketHandler := handlers.NewTicketHandler(ticketService)
 
-	router := gin.Default()
+	env := os.Getenv("ENV")
+	if env == "dev" {
+		gin.SetMode(gin.DebugMode)
+	} else {
+		gin.SetMode(gin.ReleaseMode)
+	}
 
-	//router.Use(middleware.TimeoutMiddleware(1 * time.Second))
+	router := gin.Default()
 
 	router.GET("/health", func(c *gin.Context) {
 		if db.DB.IsHealthy() && db.Redis.IsHealthy() {
