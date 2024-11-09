@@ -48,6 +48,10 @@ func connectDB() error {
 		return fmt.Errorf("failed to connect to DB: %v", err)
 	}
 
+	if err := DB.client.Ping(); err != nil {
+		return fmt.Errorf("failed to connect to DB: %v", err)
+	}
+
 	log.Println("Connected to database!!")
 	return nil
 }

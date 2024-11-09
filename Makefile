@@ -1,8 +1,8 @@
-run:
-	@go run cmd/api/main.go
+run-dev:
+	@ENV=dev go run cmd/api/main.go
 
 migration:
-	@go run cmd/migration/main.go
+	@ENV=dev go run cmd/migration/main.go
 
 test:
 	@go test -v ./...

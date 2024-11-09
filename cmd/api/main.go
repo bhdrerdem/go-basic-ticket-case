@@ -15,15 +15,11 @@ import (
 
 func main() {
 
-	env := os.Getenv("ENV")
-	if env == "dev" {
+	if os.Getenv("ENV") == "dev" {
 		err := godotenv.Load()
 		if err != nil {
-			log.Fatal("Failed to load env vars")
+			log.Fatalf("failed to load env vars %v", err)
 		}
-		gin.SetMode(gin.DebugMode)
-	} else {
-		gin.SetMode(gin.ReleaseMode)
 	}
 
 	db.InitDB()
