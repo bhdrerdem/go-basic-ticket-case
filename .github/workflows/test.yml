@@ -4,9 +4,13 @@ on:
   push:
     branches:
       - master
+    paths:
+      - "server/**"
   pull_request:
     branches:
       - master
+    paths:
+      - "server/**"
   workflow_dispatch:
 
 jobs:
@@ -24,7 +28,9 @@ jobs:
           cache-dependency-path: go.sum
 
       - name: Install Dependencies
+        working-directory: server
         run: go mod download
 
       - name: Run Tests
+        working-directory: server
         run: make test
