@@ -47,7 +47,12 @@ func (s *TicketService) CreateTicket(ticket *models.Ticket) error {
 func (s *TicketService) GetTicket(id int) (*models.Ticket, error) {
 	ticket, err := s.getCacheTicket(id)
 	if err == nil && ticket != nil {
+		log.Printf("Cache hit for ticket: %d", id)
 		return ticket, nil
+	}
+
+	if err != nil {
+		log.Printf("Cache miss for ticket: %d", id)
 	}
 
 	ticket = &models.Ticket{}
