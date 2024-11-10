@@ -1,11 +1,11 @@
 {
   "swagger": "2.0",
   "info": {
-    "description": "This is a sample server for a ticket purchasing application.",
+    "description": "This is a simple API for purchasing tickets",
     "version": "1.0.0",
     "title": "Ticket Purchasing API"
   },
-  "host": "localhost:8080",
+  "host": "http://infras-gowit-mey2yauflka8-1376627103.eu-central-1.elb.amazonaws.com",
   "basePath": "/api/v1",
   "schemes": ["http"],
   "paths": {
