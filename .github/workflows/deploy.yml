@@ -31,23 +31,23 @@ jobs:
         id: db_secrets
         uses: aws-actions/aws-secretsmanager-get-secrets@v2
         with:
-          secret-ids: ${{ env.SECRET_NAME }}
-
-      - name: Debug secrets
-        run: |
-          echo "Outputs: ${{ toJSON(steps.db_secrets.outputs) }}"
+          secret-ids: |
+            SECRET_VALS, ${{ env.SECRET_NAME }}
 
       - name: Run Migrations
+        env:
+          DB_SECRETS: ${{ env.SECRET_VALS }}
         run: |
+          DB_USER=$(echo "$DB_SECRETS" | jq -r '.username')
+          DB_PASSWORD=$(echo "$DB_SECRETS" | jq -r '.password')
+          DB_HOST=$(echo "$DB_SECRETS" | jq -r '.host')
+          DB_PORT=$(echo "$DB_SECRETS" | jq -r '.port')
+          DB_NAME=$(echo "$DB_SECRETS" | jq -r '.dbname')
+
+          export DB_USER DB_PASSWORD DB_HOST DB_PORT DB_NAME
+
           cd server
           make migration
-        env:
-          DB_SECRETS: ${{ steps.db_secrets.outputs[env.SECRET_NAME] }}
-          DB_USER: ${{ fromJson(env.DB_SECRETS).username }}
-          DB_PASSWORD: ${{ fromJson(env.DB_SECRETS).password }}
-          DB_HOST: ${{ fromJson(env.DB_SECRETS).host }}
-          DB_PORT: ${{ fromJson(env.DB_SECRETS).port }}
-          DB_NAME: ${{ fromJson(env.DB_SECRETS).dbname }}
 
       - name: Login to Amazon ECR
         id: login-ecr
