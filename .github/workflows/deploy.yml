@@ -35,8 +35,7 @@ jobs:
 
       - name: Debug secrets
         run: |
-          echo ${{ steps.db_secrets.outputs[env.SECRET_NAME] }}
-          echo ${{ fromJson(steps.db_secrets.outputs[env.SECRET_NAME]) }}
+          echo "Outputs: ${{ toJSON(steps.db_secrets.outputs) }}"
 
       - name: Run Migrations
         run: |
