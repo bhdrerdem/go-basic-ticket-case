@@ -107,10 +107,6 @@ export class InfraStack extends cdk.Stack {
         memoryLimitMiB: 512,
         cpu: 256,
         vpc,
-        runtimePlatform: {
-          cpuArchitecture: ecs.CpuArchitecture.ARM64,
-          operatingSystemFamily: ecs.OperatingSystemFamily.LINUX,
-        },
       }
     );
 
