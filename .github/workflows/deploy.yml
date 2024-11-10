@@ -1,0 +1,66 @@
+name: Build and Deploy
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    env:
+      AWS_REGION: eu-central-1
+      ECR_REPO_NAME: gowit-case
+      ECS_SERVICE_NAME: InfraStack-GoWitCaseServerServiceB770CD97-5BezDSWAMtdw
+      ECS_CLUSTER_NAME: InfraStack-EcsDefaultClusterMnL3mNNYNGowitVpcBC7579CC-9pmNsdbDVRx3
+      SECRET_NAME: ${{ secrets.AWS_SECRET_NAME }}
+
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@v3
+
+      - name: Set up AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Retrieve DB Credentials from AWS Secrets Manager
+        id: db_secrets
+        uses: aws-actions/aws-secretsmanager-get-secrets@v2
+        with:
+          secret-ids: ${{ env.SECRET_NAME }}
+
+      - name: Run Migrations
+        run: |
+          cd server
+          make migration
+        env:
+          DB_USER: ${{ steps.db_secrets.outputs.username }}
+          DB_PASSWORD: ${{ steps.db_secrets.outputs.password }}
+          DB_HOST: ${{ steps.db_secrets.outputs.host }}
+          DB_PORT: ${{ steps.db_secrets.outputs.port }}
+          DB_NAME: ${{ steps.db_secrets.outputs.dbname }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Build, tag, and push image to Amazon ECR
+        id: build-image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: ${{ env.ECR_REPO_NAME }}
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:latest .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+
+      - name: Deploy to ECS
+        run: |
+          aws ecs update-service --cluster $ECS_CLUSTER_NAME --service $ECS_SERVICE_NAME --force-new-deployment
