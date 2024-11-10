@@ -1,8 +1,11 @@
 run-dev:
 	@ENV=dev go run cmd/api/main.go
 
-migration:
+migration-dev:
 	@ENV=dev go run cmd/migration/main.go
+
+migration:
+	@go run cmd/migration/main.go
 
 test:
 	@go test -v ./...
